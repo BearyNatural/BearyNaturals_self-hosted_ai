@@ -1,4 +1,6 @@
-# Self-hosted AI starter kit
+# BearyNatural's Self-Hosted AI
+
+So far I am just playing with this and hosting locally. 
 
 **Self-hosted AI Starter Kit** is an open-source Docker Compose template designed to swiftly initialize a comprehensive local AI and low-code development environment.
 
