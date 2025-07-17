@@ -3,9 +3,9 @@
 set -e
 
 # --- ENVIRONMENT VARIABLES ---
-export POSTGRES_USER=${POSTGRES_USER:-n8n}
-export POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-n8npass}
-export POSTGRES_DB=${POSTGRES_DB:-n8ndb}
+export POSTGRES_USER=n8n
+export POSTGRES_PASSWORD=n8npass
+export POSTGRES_DB=n8n
 
 # --- CREATE VOLUMES ---
 docker volume create postgres_storage
@@ -34,22 +34,26 @@ docker run --rm --name n8n-import-creds \
   --hostname n8n-import-creds \
   --network demo \
   --env-file .env \
+  --entrypoint n8n \
   -e DB_TYPE=postgresdb \
   -e DB_POSTGRESDB_HOST=postgres \
   -e DB_POSTGRESDB_USER=$POSTGRES_USER \
   -e DB_POSTGRESDB_PASSWORD=$POSTGRES_PASSWORD \
   -e N8N_DIAGNOSTICS_ENABLED=false \
   -e N8N_PERSONALIZATION_ENABLED=false \
+  -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true \
   -e OLLAMA_HOST=host.docker.internal:11434 \
+  -e N8N_RUNNERS_ENABLED=true \
   -v ./n8n/backup:/backup \
   n8nio/n8n:latest \
-  n8n import:credentials --separate --input=/backup/credentials
+  import:credentials --separate --input=/backup/credentials
 
 # --- IMPORT WORKFLOWS ---
 docker run --rm --name n8n-import-workflows \
   --hostname n8n-import-workflows \
   --network demo \
   --env-file .env \
+  --entrypoint n8n \
   -e DB_TYPE=postgresdb \
   -e DB_POSTGRESDB_HOST=postgres \
   -e DB_POSTGRESDB_USER=$POSTGRES_USER \
@@ -57,9 +61,11 @@ docker run --rm --name n8n-import-workflows \
   -e N8N_DIAGNOSTICS_ENABLED=false \
   -e N8N_PERSONALIZATION_ENABLED=false \
   -e OLLAMA_HOST=host.docker.internal:11434 \
+  -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true \
+  -e N8N_RUNNERS_ENABLED=true \
   -v ./n8n/backup:/backup \
   n8nio/n8n:latest \
-  n8n import:workflow --separate --input=/backup/workflows
+  import:workflow --separate --input=/backup/workflows
 
 # --- START QDRANT ---
 docker run -d --name qdrant \
@@ -84,6 +90,8 @@ docker run -d --name n8n \
   -e N8N_DIAGNOSTICS_ENABLED=false \
   -e N8N_PERSONALIZATION_ENABLED=false \
   -e OLLAMA_HOST=host.docker.internal:11434 \
+  -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true \
+  -e N8N_RUNNERS_ENABLED=true \
   -v n8n_storage:/home/node/.n8n \
   -v ./n8n/backup:/backup \
   -v ./shared:/data/shared \
@@ -92,4 +100,4 @@ docker run -d --name n8n \
 echo ""
 echo "✅ All services are up and running!"
 echo "🌐 Open n8n in your browser: http://localhost:5678"
-echo "👉 Edit the 'Local Ollama Service' credential to use: http://host.docker.internal:11434/"
+echo "👉 Update the 'Local Ollama Service' credential to: http://host.docker.internal:11434/"

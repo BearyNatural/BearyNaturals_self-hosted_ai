@@ -2,6 +2,23 @@
 
 So far I am just playing with this and hosting locally. With my local version I do not use the docker-compose.yml, I created and ran my docker-start.sh to interact with my locally installed and run ollama.
 
+I have included a clean up script to remove all the containers quickly.
+
+Run ./docker-start.sh to install and run the docker containers
+
+Once up go to http://localhost:5678 as this is the 1st visit you will need to:
+- Create an admin account (email and password)
+- Set up optional telemetry preferences
+- Load into the visual workflow editor
+
+# Run these to stop/start the postgres only if you want to they will be fine during the restart of desktop
+docker stop n8n qdrant postgres
+docker start postgres qdrant n8n
+
+
+
+---
+
 **Self-hosted AI Starter Kit** is an open-source Docker Compose template designed to swiftly initialize a comprehensive local AI and low-code development environment.
 
 ![n8n.io - Screenshot](https://raw.githubusercontent.com/n8n-io/self-hosted-ai-starter-kit/main/assets/n8n-demo.gif)
