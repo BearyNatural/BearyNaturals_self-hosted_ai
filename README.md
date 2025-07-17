@@ -1,6 +1,6 @@
 # BearyNatural's Self-Hosted AI
 
-So far I am just playing with this and hosting locally. 
+So far I am just playing with this and hosting locally. With my local version I do not use the docker-compose.yml, I created and ran my docker-start.sh to interact with my locally installed and run ollama.
 
 **Self-hosted AI Starter Kit** is an open-source Docker Compose template designed to swiftly initialize a comprehensive local AI and low-code development environment.
 
