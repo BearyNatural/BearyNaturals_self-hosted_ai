@@ -26,7 +26,7 @@ docker run -d --name postgres \
   -v postgres_storage:/var/lib/postgresql/data \
   postgres:16-alpine
 
-echo "⏳ Waiting 10 seconds for PostgreSQL to initialize..."
+echo "Waiting 10 seconds for PostgreSQL to initialize..."
 sleep 10
 
 # --- IMPORT CREDENTIALS ---
@@ -97,7 +97,10 @@ docker run -d --name n8n \
   -v ./shared:/data/shared \
   n8nio/n8n:latest
 
+# Start Cloudflare Tunnel in the background
+cloudflared tunnel run n8n-tunnel 
+
 echo ""
-echo "✅ All services are up and running!"
-echo "🌐 Open n8n in your browser: http://localhost:5678"
-echo "👉 Update the 'Local Ollama Service' credential to: http://host.docker.internal:11434/"
+echo "All services are up and running!"
+echo "Open n8n in your browser: http://localhost:5678"
+echo "Update the 'Local Ollama Service' credential to: http://host.docker.internal:11434/"
